@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Vendor A Payment Gateway
+  description: API for processing payments via Vendor A.
+  version: 1.0.0
+paths:
+  /payments:
+    post:
+      summary: Process a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ transactionId, amount,currency,type ]
+              properties:
+                transactionId:
+                  type: string
+                amount:
+                  type: number
+                currency:
+                  type: string
+                type:
+                  type: string
+                  enum: [ deposit, withdrawal ]
+      responses:
+        '200':
+          description: Payment successfully processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  transactionId:
+                    type: string
+        '400':
+          description: Invalid request
+  /status/{transactionId}:
+    get:
+      summary: Get the status of a transaction
+      parameters:
+        - in: path
+          name: transactionId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Transaction status retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  transactionId:
+                    type: string
+        '404':
+          description: Transaction not found

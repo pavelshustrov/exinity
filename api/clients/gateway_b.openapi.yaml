@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Vendor B Payment Gateway
+  description: API for processing payments via Vendor B.
+  version: 1.0.0
+paths:
+  /ProcessPayment:
+    post:
+      summary: Process a payment
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: object
+              required: [ TransactionId, Amount, Currency, Type ]
+              properties:
+                TransactionId:
+                  type: string
+                Amount:
+                  type: number
+                Currency:
+                  type: string
+                Type:
+                  type: string
+                  enum: [ deposit, withdrawal ]
+      responses:
+        '200':
+          description: Payment successfully processed
+          content:
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  Status:
+                    type: string
+                  TransactionId:
+                    type: string
+        '400':
+          description: Invalid request
+  /GetStatus:
+    get:
+      summary: Get the status of a transaction
+      parameters:
+        - in: query
+          name: TransactionId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Transaction status retrieved
+          content:
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  Status:
+                    type: string
+                  TransactionId:
+                    type: string
+        '404':
+          description: Transaction not found

@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Payment Gateway Microservice
+  description: API for managing deposits and handling payment gateway callbacks.
+  version: 1.0.0
+paths:
+  /transactions/{gateway}/deposit:
+    post:
+      summary: Handle deposit
+      parameters:
+        - in: path
+          name: gateway
+          required: true
+          schema:
+            type: string
+            enum: [ gatewayA, gatewayB ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [ order_id, amount, currency ]
+              type: object
+              properties:
+                order_id:
+                  type: string
+                amount:
+                  type: number
+                currency:
+                  type: string
+      responses:
+        '200':
+          description: Deposit successfully completed
+        '400':
+          description: Invalid request
+  /callbacks/{type}:
+    post:
+      summary: Universal callback handler
+      parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: [ json, xml ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                  format: uuid
+                transactionId:
+                  type: string
+                status:
+                  type: string
+                  enum: [ success, failure, pending ]
+          application/xml:
+            schema:
+              type: object
+              properties:
+                OrderId:
+                  type: string
+                  format: uuid
+                TransactionId:
+                  type: string
+                Status:
+                  type: string
+                  enum: [ success, failure, pending ]
+      responses:
+        '200':
+          description: Callback successfully processed
+        '400':
+          description: Invalid callback data

@@ -1,0 +1,7 @@
+package: gateway_b
+output: gateway_b.client.gen.go
+generate:
+  models: true
+  client: true
+output-options:
+  skip-prune: true

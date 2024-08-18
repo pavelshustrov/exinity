@@ -1,0 +1,7 @@
+package: server
+output: payments.service.gen.go
+generate:
+  models: true
+  echo-server: true
+output-options:
+  skip-prune: true
